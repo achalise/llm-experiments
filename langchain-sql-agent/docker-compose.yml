@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: welcome
+      POSTGRES_USER: admin
+      POSTGRES_DB: demo_db
+    volumes:
+      - postgres_data:/tmp/postgres/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:

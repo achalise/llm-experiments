@@ -1,0 +1,32 @@
+DROP TABLE IF EXISTS claim;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS address;
+
+CREATE TABLE address (
+    id SERIAL PRIMARY KEY,
+    street VARCHAR(100) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(3) NOT NULL,
+    postcode VARCHAR(4) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    firstName  VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    address_id INTEGER REFERENCES address (id)
+);
+
+
+
+CREATE TABLE claim (
+    id SERIAL PRIMARY KEY,
+    amount INTEGER NOT NULL,
+    description VARCHAR(100),
+    type  VARCHAR(25) NOT NULL,
+    status VARCHAR(10) NOT NULL,
+    user_id INTEGER REFERENCES users (id),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
