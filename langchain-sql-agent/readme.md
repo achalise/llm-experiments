@@ -20,7 +20,7 @@ A simple set up to query a Postgres database using natural language.
 
 ### Testing
 
-Example using httpie(https://httpie.io/)
+Example using [httpie](https://httpie.io/)
 
 
 ```
