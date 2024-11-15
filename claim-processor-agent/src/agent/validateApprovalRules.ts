@@ -10,7 +10,7 @@ export const validateApprovalRequest = async (state: typeof StateAnnotation.Stat
         throw new Error("Expected the last message to be an AI message");
     }
 
-    // Cast here since `tool_calls` does not exist on `BaseMessage`
+  // Cast here since `tool_calls` does not exist on `BaseMessage`
   const messageCastAI = lastMessage as AIMessage;
   const approvePaymentTool = messageCastAI.tool_calls?.find(
     (tc) => tc.name === "approve_payment"
@@ -24,7 +24,7 @@ export const validateApprovalRequest = async (state: typeof StateAnnotation.Stat
   if (claimDetails.claimAmount > 50000) {
     console.log(`Claim amount is too large, needs human intervention`);
     throw new NodeInterrupt("Please approve the payment for amount greater than 30000");
-  } 
+  }
 
   return {
     paymentApproved : true,
