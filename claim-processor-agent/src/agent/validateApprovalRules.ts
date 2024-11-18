@@ -3,7 +3,7 @@ import { StateAnnotation } from "./state.js";
 import { NodeInterrupt } from "@langchain/langgraph";
 
 export const validateApprovalRequest = async (state: typeof StateAnnotation.State) => {
-    const { messages, claimDetails } = state;
+    const { messages, claimDetails, paymentApproved } = state;
 
     const lastMessage = messages[messages.length - 1];
     if (lastMessage.getType() !== "ai") {
@@ -21,7 +21,7 @@ export const validateApprovalRequest = async (state: typeof StateAnnotation.Stat
     );
   }
   console.log(`the claim amount is  ${claimDetails.claimAmount}`);
-  if (claimDetails.claimAmount > 50000) {
+  if (claimDetails.claimAmount > 50000 && !paymentApproved) {
     console.log(`Claim amount is too large, needs human intervention`);
     throw new NodeInterrupt("Please approve the payment for amount greater than 30000");
   }
