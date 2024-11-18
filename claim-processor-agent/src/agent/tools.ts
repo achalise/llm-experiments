@@ -16,7 +16,8 @@ export const userDetailsTool = tool((input) => {
 export const fraudCheckTool = tool((input) => {
     console.log(`Fraud check for ${JSON.stringify(input)}...`);
      return JSON.stringify({
-         result: "SUCCESS"
+         result: "SUCCESS",
+         message: "Fraud check was successful"
      })
  }, {name: "fraud_Check", schema: z.object({
      firstName: z.string().describe("First name of user"),
@@ -31,7 +32,7 @@ export const fraudCheckTool = tool((input) => {
     if(!input.claimId || input.claimId === "UNDEFINED") {
         let claimId = Math.random().toString(36).substr(2, 9);
         input.claimId = claimId;
-        return `Successfully created claim for policy number ${input.policyNumber} and claimId ${input.claimId}.`;
+        return `Successfully created claim for policy number ${input.policyNumber}. claimID for this claim is ${input.claimId}.`;
     } else {
         return `Successfully updated claim with ID ${input.claimId} for policy number ${input.policyNumber} to status ${input.claimStatus}`;
     }

@@ -77,24 +77,8 @@ const callModel = async (
   return { messages: [result] };
 };
 
-/**
- * Routing function: Determines whether to continue research or end the builder.
- * This function decides if the gathered information is satisfactory or if more research is needed.
- *
- * @param state - The current state of the research builder
- * @returns Either "callModel" to continue research or END to finish the builder
- */
-export const route = (
-  state: typeof StateAnnotation.State,
-): "__end__" | "agent" => {
-  if (state.messages.length > 0) {
-    return "__end__";
-  }
-  // Loop back
-  return "agent";
-};
 
-const shouldContinue = (state: typeof StateAnnotation.State) => {
+const route = (state: typeof StateAnnotation.State) => {
   const { messages } = state;
   const lastMessage = messages[messages.length - 1];
   // Cast here since `tool_calls` does not exist on `BaseMessage`
@@ -112,10 +96,10 @@ const shouldContinue = (state: typeof StateAnnotation.State) => {
   return tool_calls.map((tc) => {
     if (tc.name === "create_or_update_claim") {
       // The user is trying to purchase a stock, route to the verify purchase node.
-      return "prepare_claim_detail";
+      return "validate_claim_detail";
     } else if(tc.name === "approve_payment") {
       console.log(`agent is trying to approve the payment`);
-      return "execute_approve_payment";
+      return "validate_approval_request";
     } else {
       return "tools";
     }
@@ -131,17 +115,17 @@ const builder = new StateGraph(StateAnnotation)
   // to add the edges.
   .addNode("agent", callModel)
   .addNode("tools", toolNode)
-  .addNode("prepare_claim_detail", validateClaimDetail)
-  .addNode("execute_approve_payment", validateApprovalRequest)
+  .addNode("validate_claim_detail", validateClaimDetail)
+  .addNode("validate_approval_request", validateApprovalRequest)
   // Regular edges mean "always transition to node B after node A is done"
   // The "__start__" and "__end__" nodes are "virtual" nodes that are always present
   // and represent the beginning and end of the builder.
   .addEdge("__start__", "agent")
   .addEdge("tools", "agent")
-  .addEdge("prepare_claim_detail", "tools")
-  .addEdge("execute_approve_payment", "tools")
+  .addEdge("validate_claim_detail", "tools")
+  .addEdge("validate_approval_request", "tools")
   // Conditional edges optionally route to different nodes (or end)
-  .addConditionalEdges("agent", shouldContinue, ["tools", "prepare_claim_detail", "execute_approve_payment",
+  .addConditionalEdges("agent", route, ["tools", "validate_claim_detail", "validate_approval_request",
     END]);
 
 export const graph = builder.compile(
@@ -150,4 +134,4 @@ export const graph = builder.compile(
   {checkpointer: new MemorySaver(),}
 );
 
-graph.name = "New }Agent";
+graph.name = "Claims Processor Agent";

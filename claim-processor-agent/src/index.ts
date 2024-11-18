@@ -1,7 +1,8 @@
 import { HumanMessage } from "@langchain/core/messages";
 import { graph } from "./agent/graph.js";
+import { IterableReadableStream } from "@langchain/core/utils/stream";
 const config = { configurable: { thread_id: "thread1" } };
-let streamResults = async () => { 
+export const streamResults = async (): Promise<IterableReadableStream<any>> => { 
     //const graph = await ();
     const results = graph.withConfig(config).stream(
     {
@@ -25,11 +26,12 @@ When my application is completed, please write a satire for me.
     },
     { recursionLimit: 100 },
   );
-  
-  for await (const output of await results) {
-    if (!output?.__end__) {
-      console.log(output);
-    }
-}}
+  return results;
+  // for await (const output of await results) {
+  //   if (!output?.__end__) {
+  //     console.log(output);
+  //   }
+  // }
+}
 
 streamResults();
