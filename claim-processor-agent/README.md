@@ -1,11 +1,12 @@
 # ClaimProcessor Agent Using LangGraph 
 
+The core logic is defined in `src/agent/graph.ts` and the api packaging the agent is served from `src/app.ts`
 
 
+The graph can be viewed in the [LangGraph studio UI](https://studio.langgraph.com/)
 
 ![Graph view in LangGraph studio UI](./static/studio.png)
 
-The core logic is defined in `src/agent/graph.ts` and the api packaging the agent is served from `src/app.ts`
 
 
 ### Running the application
