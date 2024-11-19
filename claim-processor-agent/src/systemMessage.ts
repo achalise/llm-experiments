@@ -25,7 +25,9 @@ export const systemSetUpMessage = (): string => {
       You will then approve payment for the claim only if the claim status is FRAUD_CHECK_SUCCESS. 
 
       Step 6: Send confirmation email.
-      You will then send an email to the user with the claim status only after the claim status is APPROVED.
+      You will then send an email to the user with the claim status and the claimId only after the claim status is APPROVED.
+
+      You will include both claimId and claimStatus in the final response to the user.
       
       ` 
 }

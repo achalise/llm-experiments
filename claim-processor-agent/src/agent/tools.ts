@@ -30,9 +30,10 @@ export const fraudCheckTool = tool((input) => {
  export const createOrUpdateClaimTool = tool((input) => {
     console.log(`Creating or updating claim...`);
     if(!input.claimId || input.claimId === "UNDEFINED") {
-        let claimId = Math.random().toString(36).substr(2, 9);
+        let claimId = Math.random().toString(36).substring(2, 9);
         input.claimId = claimId;
-        return `Successfully created claim for policy number ${input.policyNumber}. claimID for this claim is ${input.claimId}.`;
+        return input;
+        //return `Successfully created claim for policy number ${input.policyNumber}. claimID for this claim is ${input.claimId}.`;
     } else {
         return `Successfully updated claim with ID ${input.claimId} for policy number ${input.policyNumber} to status ${input.claimStatus}`;
     }
@@ -49,5 +50,5 @@ export const fraudCheckTool = tool((input) => {
 
  export const sendConfirmationEmailTool = tool((input) => {
     console.log(`Sending email for the claim...`);
-    return `Email sent to ${input.userEmail} for the claim with status ${input.claimStatus}`;
+    return `Email sent to ${input.userEmail} for the claim ${input.claimId}. The status of the claim ${input.claimStatus}`;
  }, {name: "send_confirmation_email", schema: claimDetailsSchema, description: "Send email to the customer when claim is approved"})

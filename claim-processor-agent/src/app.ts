@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import { graph } from './agent/graph.js';
 import { BaseMessage, HumanMessage } from '@langchain/core/messages';
 
-const config = { configurable: { thread_id: "thread1" } };
+const config = { configurable: { thread_id: `thread-${Math.random()}` } };
 
 const app: Express = express();
 //please create an express server and implement the routes as per your requirements
@@ -10,9 +10,7 @@ const app: Express = express();
 app.get('/api/chat', async (req: Request, res: Response) => {
     const { message } = req.query;
     console.log(`Received message: ${message}`);
-    // Implement your logic here to process the message and generate the response
-    // For example, you can use a language model to generate a response based on the given message
-    //const response = "Generated response based on the given message";
+    
     const result = await graph.withConfig(config).invoke({
         messages: [new HumanMessage(message as string)],
       },
